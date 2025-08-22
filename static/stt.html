@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EchoScribe — Speech → Text</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+</head>
+
+<body>
+    <main class="container">
+        <h1>🎙️ EchoScribe — Speech → Text</h1>
+        <p class="muted">Record your voice or upload an audio file, then transcribe.</p>
+
+        <section class="card">
+            <h2>Record from Microphone</h2>
+            <div class="controls">
+                <button id="recordBtn">Start</button>
+                <button id="stopBtn" disabled>Stop</button>
+            </div>
+            <audio id="preview" controls></audio>
+            <p class="muted">The recording is captured in the browser (webm) and sent to the server.</p>
+        </section>
+
+        <section class="card">
+            <h2>Or Upload a File</h2>
+            <input id="fileInput" type="file" accept="audio/*" />
+        </section>
+
+        <section class="card">
+            <h2>Transcription</h2>
+            <button id="transcribeBtn">Transcribe</button>
+            <div id="status" class="status"></div>
+            <pre id="result" class="result"></pre>
+        </section>
+    </main>
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
