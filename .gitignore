@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+env/
+venv/
+*.egg-info/
+*.log
+
+# OS
+.DS_Store
+
+# Audio & working files
+*.wav
+*.mp3
+*.webm
+demucs_outputs/
