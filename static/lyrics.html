@@ -5,10 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Music/Lyrics → Text (Preview)</title>
+    <link rel="stylesheet" href="/static/main.css" />
     <link rel="stylesheet" href="/static/hub.css" />
 </head>
 
 <body>
+    <nav id="top-nav">
+        <div class="nav-right" id="nav-menu">
+            <a href="/" class="nav-back" id="nav-back" title="Back (⌫)">← Back</a>
+        </div>
+    </nav>
+
     <main class="wrap">
         <header class="hero">
             <h1>Music/Lyrics → Text</h1>
@@ -18,6 +25,15 @@
         </p>
         <p><a href="/" class="card" style="display:inline-flex;padding:.6rem 1rem">← Back</a></p>
     </main>
+
+    <div class="footer-decoration" tabindex="0" aria-label="Back to previous screen"
+        onclick="(history.length>1?history.back():location.assign('/'))">
+        <span>←</span><span>✨</span><span>💫</span><span>🏠</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app.js"></script>
+    <script src="/static/nav.js"></script>
 </body>
 
 </html>

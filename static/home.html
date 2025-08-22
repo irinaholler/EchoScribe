@@ -5,13 +5,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>EchoScribe — Modes</title>
+
+    <!-- Base theme first, hub grid second -->
+    <link rel="stylesheet" href="/static/main.css" />
     <link rel="stylesheet" href="/static/hub.css" />
+
+    <!-- Gaming font for the title -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <!-- Floating background orbs (uses classes from main.css) -->
+    <div class="bg-elements" aria-hidden="true">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="floating-orb orb-4"></div>
+    </div>
+
     <main class="wrap">
         <header class="hero">
-            <h1>EchoScribe</h1>
+            <h1 class="title-game" data-glitch="ECHOSCRIBE">ECHOSCRIBE</h1>
             <p class="tag">Pick your superpower</p>
         </header>
 
@@ -19,8 +34,7 @@
             <!-- Voice → Text -->
             <a class="card" href="/stt">
                 <div class="icon" aria-hidden="true">
-                    <!-- mic -->
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 14a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v4a3 3 0 0 0 3 3Zm7-3a7 7 0 0 1-14 0M12 21v-3"
                             fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                     </svg>
@@ -34,8 +48,7 @@
             <a class="card disabled" role="button" tabindex="0" aria-disabled="true">
                 <div class="badge">soon</div>
                 <div class="icon" aria-hidden="true">
-                    <!-- waveform -->
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M3 12h2m2 0h2m2-4v8m2-6v4m2-2h2m2 0h2" fill="none" stroke="currentColor"
                             stroke-width="1.8" stroke-linecap="round" />
                     </svg>
@@ -48,8 +61,7 @@
             <!-- Video → Text -->
             <a class="card" href="/video">
                 <div class="icon" aria-hidden="true">
-                    <!-- video -->
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path
                             d="M4 7h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Zm12 3 6-3v10l-6-3"
                             fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
@@ -64,8 +76,7 @@
             <!-- Music/Lyrics → Text -->
             <a class="card" href="/lyrics">
                 <div class="icon" aria-hidden="true">
-                    <!-- music note -->
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M9 18a3 3 0 1 1-2-2.83V6l10-2v9.17A3 3 0 1 1 15 15V7" fill="none" stroke="currentColor"
                             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
@@ -82,6 +93,14 @@
             <a href="/stt">Quick start</a>
         </footer>
     </main>
+
+    <!-- Floating charm: scroll to top (nav.js binds smooth scroll) -->
+    <div class="footer-decoration" tabindex="0" aria-label="Scroll to top">
+        <span>↑</span><span>✨</span><span>💫</span><span>🏠</span>
+    </div>
+
+    <!-- Nav / back / scroll-top logic -->
+    <script src="/static/nav.js"></script>
 </body>
 
 </html>

@@ -5,37 +5,93 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>EchoScribe — Speech → Text</title>
+
+    <!-- Base theme first, hub grid second, page styles last -->
+    <link rel="stylesheet" href="/static/main.css" />
+    <link rel="stylesheet" href="/static/hub.css" />
     <link rel="stylesheet" href="/static/styles.css" />
+
+    <!-- Gaming font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <!-- Sticky neon nav -->
+    <nav id="top-nav">
+        <div class="nav-right" id="nav-menu">
+            <a href="/" class="nav-back" id="nav-back" title="Back (⌫)">← Back</a>
+        </div>
+    </nav>
+
     <main class="container">
-        <h1>🎙️ EchoScribe — Speech → Text</h1>
-        <p class="muted">Record your voice or upload an audio file, then transcribe.</p>
+        <h1 class="title-game" data-glitch="ECHOSCRIBE">ECHOSCRIBE</h1>
+        <h4 class="muted">Record your voice or upload an audio file, then transcribe.</h4>
 
-        <section class="card">
-            <h2>Record from Microphone</h2>
-            <div class="controls">
-                <button id="recordBtn">Start</button>
-                <button id="stopBtn" disabled>Stop</button>
+        <div class="split">
+            <div class="left">
+                <section class="card">
+                    <h2>Record from Microphone</h2>
+                    <div class="controls">
+                        <button id="recordBtn">Start</button>
+                        <button id="stopBtn" disabled>Stop</button>
+                    </div>
+
+                    <!-- live equalizer -->
+                    <div class="viz-wrap">
+                        <div class="viz-head">
+                            <span class="viz-dot" aria-hidden="true"></span>
+                            <span class="viz-title">Input level</span>
+                            <span class="viz-mini">LIVE</span>
+                        </div>
+                        <div id="viz" class="viz" aria-hidden="true"></div>
+                    </div>
+
+                    <div class="player">
+                        <div class="player-head">
+                            <span class="player-icon">🎧</span>
+                            <span class="player-title">Preview</span>
+                        </div>
+
+                        <div class="audio-frame">
+                            <audio id="preview" controls></audio>
+                        </div>
+
+                        <p class="caption-chip">
+                            <span class="chip-dot"></span>
+                            The recording is captured in the browser webm and then sent to the server.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>Or Upload a File</h2>
+                    <input id="fileInput" type="file" accept="audio/*" />
+                </section>
             </div>
-            <audio id="preview" controls></audio>
-            <p class="muted">The recording is captured in the browser (webm) and sent to the server.</p>
-        </section>
 
-        <section class="card">
-            <h2>Or Upload a File</h2>
-            <input id="fileInput" type="file" accept="audio/*" />
-        </section>
+            <div class="right">
+                <section class="card">
+                    <h2>Transcription</h2>
+                    <button id="transcribeBtn">Transcribe</button>
+                    <div id="status" class="status"></div>
+                    <pre id="result" class="result"></pre>
+                </section>
+            </div>
+        </div>
 
-        <section class="card">
-            <h2>Transcription</h2>
-            <button id="transcribeBtn">Transcribe</button>
-            <div id="status" class="status"></div>
-            <pre id="result" class="result"></pre>
-        </section>
+        <!-- Inline back (kept minimal). Safe fallback to home -->
+        <p><a href="/" class="card" style="display:inline-flex;padding:.6rem 1rem">← Back</a></p>
     </main>
+
+    <!-- Floating charm: scroll to top (nav.js binds smooth scroll) -->
+    <div class="footer-decoration" tabindex="0" aria-label="Scroll to top">
+        <span>↑</span><span>✨</span><span>💫</span><span>🏠</span>
+    </div>
+
+    <!-- Scripts -->
     <script src="/static/app.js"></script>
+    <script src="/static/nav.js"></script>
 </body>
 
 </html>
