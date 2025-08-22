@@ -1,5 +1,7 @@
+// === EchoScribe STT — app.js ===
 let mediaRecorder, chunks = [], lastBlob = null;
 
+// shorthands
 const $ = (id) => document.getElementById(id);
 const recordBtn = $("recordBtn");
 const stopBtn = $("stopBtn");
@@ -8,21 +10,22 @@ const fileInput = $("fileInput");
 const statusEl = $("status");
 const resultEl = $("result");
 
-// language pills (nice UI instead of raw text)
+// language pills
 const langBar = $("langBar");
 const langTag = $("langTag");
 const langProb = $("langProb");
 
-// --- Fullscreen reader modal ---
-const readerModal = document.getElementById("readerModal");
-const readerText = document.getElementById("readerText");
-const readerClose = document.getElementById("readerClose");
+// expand-over-card elements
+const transcriptCard = $("transcriptCard");
+const expandBtn = $("expandBtn");
+const cardExpand = $("cardExpand");
+const closeExpandBtn = $("closeExpand");
+const resultExpanded = $("resultExpanded");
 
 // ==== Recording ====
-recordBtn.addEventListener("click", async () => {
+recordBtn?.addEventListener("click", async () => {
     chunks = []; lastBlob = null; resultEl.textContent = "";
     statusEl.textContent = "";
-
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
@@ -33,15 +36,16 @@ recordBtn.addEventListener("click", async () => {
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
         mediaRecorder.onstop = () => {
-            // build final blob
             const blob = new Blob(chunks, { type: "audio/webm" });
             lastBlob = blob;
             preview.src = URL.createObjectURL(blob);
             preview.load();
             statusEl.textContent = "Recording ready to transcribe.";
-
-            // fully release mic
+            // release mic
             try { mediaRecorder.stream.getTracks().forEach(t => t.stop()); } catch { }
+            stopVisualizer();
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
         };
 
         mediaRecorder.start();
@@ -55,35 +59,32 @@ recordBtn.addEventListener("click", async () => {
     }
 });
 
-stopBtn.addEventListener("click", () => {
+stopBtn?.addEventListener("click", () => {
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
+    } else {
+        // safety: UI reset even if nothing recording
+        stopVisualizer();
+        recordBtn.disabled = false;
+        stopBtn.disabled = true;
     }
-    stopVisualizer();
-    recordBtn.disabled = false;
-    stopBtn.disabled = true;
 });
 
 // file upload
 fileInput?.addEventListener("change", () => {
-    const nameEl = document.getElementById("fileName");
+    const nameEl = $("fileName");
     if (fileInput.files && fileInput.files[0]) {
         lastBlob = fileInput.files[0];
         preview.src = URL.createObjectURL(lastBlob);
         preview.load();
-
         resultEl.textContent = "";
         statusEl.textContent = "File loaded.";
-
-        // Show the file name
-        if (nameEl) {
-            nameEl.textContent = `📂 ${lastBlob.name}`;
-        }
+        if (nameEl) nameEl.textContent = `📂 ${lastBlob.name}`;
     }
 });
 
 // ==== Transcribe ====
-$("transcribeBtn").addEventListener("click", async () => {
+$("transcribeBtn")?.addEventListener("click", async () => {
     if (!lastBlob) { statusEl.textContent = "Record or choose a file first."; return; }
 
     statusEl.textContent = "Uploading & transcribing…";
@@ -99,11 +100,17 @@ $("transcribeBtn").addEventListener("click", async () => {
         const data = await r.json();
         if (!r.ok) throw new Error(data.error || "Transcription failed");
 
-        // language badges
+        // language pills
         if (data.language) {
-            langTag.textContent = (data.language || "en").toUpperCase();
+            const code = (data.language || "en").toLowerCase();
+            const entry = LANG_MAP[code] || { name: code.toUpperCase(), flag: "🏳️" };
+            langFlag.textContent = entry.flag;
+            langName.textContent = entry.name;
+            langCode.textContent = code.toUpperCase();
+
             const p = data.prob != null ? Math.round(data.prob * 100) : null;
-            langProb.textContent = (p != null ? `${p}%` : "");
+            confPct.textContent = (p != null ? `${p}%` : "—");
+            confFill.style.width = (p != null ? `${Math.max(3, Math.min(100, p))}%` : "0%");
             langBar.hidden = false;
         } else {
             langBar.hidden = true;
@@ -111,6 +118,11 @@ $("transcribeBtn").addEventListener("click", async () => {
 
         // transcript only
         resultEl.textContent = (data.text || "").trim();
+        metaWords.textContent = `${wordCount(resultEl.textContent)} words`;
+
+        if (transcriptCard?.classList.contains("is-expanded")) {
+            resultExpanded.textContent = resultEl.textContent;
+        }
         statusEl.textContent = "Done ✅";
     } catch (e) {
         console.error(e);
@@ -122,7 +134,7 @@ $("transcribeBtn").addEventListener("click", async () => {
 let audioCtx = null, analyser = null, vizRAF = null;
 const viz = document.getElementById("viz");
 
-function buildBars(n = 32) {
+function buildBars(n = 40) {
     if (!viz) return;
     viz.innerHTML = "";
     for (let i = 0; i < n; i++) {
@@ -131,7 +143,7 @@ function buildBars(n = 32) {
         viz.appendChild(b);
     }
 }
-buildBars(40); // a tad denser for elegance
+buildBars(40);
 
 function startVisualizer(stream) {
     if (!viz) return;
@@ -155,7 +167,7 @@ function startVisualizer(stream) {
         for (let i = 0; i < bars.length; i++) {
             let sum = 0;
             for (let j = 0; j < step; j++) sum += data[i * step + j] || 0;
-            const avg = sum / step; // 0..255
+            const avg = sum / step;
             const h = Math.max(6, Math.min(60, (avg / 255) * 60));
             bars[i].style.height = h + "px";
         }
@@ -169,7 +181,7 @@ function stopVisualizer() {
     if (vizRAF) cancelAnimationFrame(vizRAF);
     vizRAF = null;
     const bars = viz ? viz.querySelectorAll(".bar") : [];
-    bars.forEach(b => b.style.height = "6px");
+    bars.forEach(b => (b.style.height = "6px"));
 }
 
 // --- Scroll-to-top binding ---
@@ -183,7 +195,6 @@ function stopVisualizer() {
         const container = document.querySelector('.container');
         const cs = container ? getComputedStyle(container) : null;
         const scrollTarget = (container && /(auto|scroll)/.test(cs?.overflowY || '')) ? container : root;
-
         if (scrollTarget.scrollTo) scrollTarget.scrollTo({ top: 0, behavior: 'smooth' });
         else { scrollTarget.scrollTop = 0; window.scrollTo(0, 0); }
     };
@@ -194,46 +205,77 @@ function stopVisualizer() {
     });
 })();
 
-// Expand/collapse transcript
-const expandBtn = $("expandBtn");
-if (expandBtn) {
-    expandBtn.addEventListener("click", () => {
-        resultEl.classList.toggle("fullscreen");
-        expandBtn.textContent = resultEl.classList.contains("fullscreen") ? "Close" : "Expand";
-    });
+// --- Expand only over the transcription card ---
+function openCardExpand() {
+    if (!transcriptCard) return;
+    resultExpanded.textContent = resultEl.textContent || "";
+    transcriptCard.classList.add("is-expanded");
+    cardExpand.setAttribute("aria-hidden", "false");
+}
+function closeCardExpand() {
+    if (!transcriptCard) return;
+    transcriptCard.classList.remove("is-expanded");
+    cardExpand.setAttribute("aria-hidden", "true");
 }
 
-// Copy / Save
+expandBtn?.addEventListener("click", openCardExpand);
+closeExpandBtn?.addEventListener("click", closeCardExpand);
+cardExpand?.addEventListener("click", (e) => {
+    if (e.target === cardExpand) closeCardExpand(); // click backdrop area inside card to close
+});
+window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && transcriptCard?.classList.contains("is-expanded")) closeCardExpand();
+});
+
+// --- Copy / Save ---
 $("copyBtn")?.addEventListener("click", async () => {
     await navigator.clipboard.writeText(resultEl.textContent || "");
     statusEl.textContent = "Copied to clipboard ✅";
 });
+
 $("saveBtn")?.addEventListener("click", () => {
-    const blob = new Blob([resultEl.textContent || ""], { type: "text/plain;charset=utf-8" });
+    const text = (resultEl.textContent || "").trim();
+    if (!text) { statusEl.textContent = "Nothing to save yet."; return; }
+
+    const base = (fileInput?.files && fileInput.files[0]?.name)
+        ? fileInput.files[0].name.replace(/\.[^/.]+$/, "")
+        : "transcript";
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    const filename = `${base}-${stamp}.txt`;
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "transcript.txt";
-    a.click();
-    URL.revokeObjectURL(a.href);
+    a.href = url; a.download = filename; a.rel = "noopener";
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
+    statusEl.textContent = "Saved .txt ✅";
 });
 
-function openReader() {
-    if (!readerModal) return;
-    readerText.textContent = resultEl.textContent || "";
-    readerModal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-}
-function closeReader() {
-    if (!readerModal) return;
-    readerModal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
+// Language mapping (add more if you like)
+const LANG_MAP = {
+    en: { name: "English", flag: "🇬🇧" }, de: { name: "German", flag: "🇩🇪" },
+    fr: { name: "French", flag: "🇫🇷" }, es: { name: "Spanish", flag: "🇪🇸" },
+    it: { name: "Italian", flag: "🇮🇹" }, pt: { name: "Portuguese", flag: "🇵🇹" },
+    el: { name: "Greek", flag: "🇬🇷" }, ru: { name: "Russian", flag: "🇷🇺" },
+    zh: { name: "Chinese", flag: "🇨🇳" }, ja: { name: "Japanese", flag: "🇯🇵" },
+    ko: { name: "Korean", flag: "🇰🇷" }, tr: { name: "Turkish", flag: "🇹🇷" }
+};
+const langFlag = $("langFlag"), langName = $("langName"), langCode = $("langCode");
+const confPct = $("confPct"), confFill = $("confFill");
+const metaDur = $("metaDur"), metaWords = $("metaWords");
+
+function fmtDuration(sec) {
+    if (!isFinite(sec) || sec <= 0) return "0:00";
+    const m = Math.floor(sec / 60), s = Math.round(sec % 60);
+    return `${m}:${String(s).padStart(2, "0")}`;
 }
 
-expandBtn?.addEventListener("click", openReader);
-readerClose?.addEventListener("click", closeReader);
-readerModal?.addEventListener("click", (e) => {
-    if (e.target === readerModal) closeReader(); // click backdrop to close
-});
-window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && readerModal?.getAttribute("aria-hidden") === "false") closeReader();
-});
+// after preview.load();
+preview.onloadedmetadata = () => { metaDur.textContent = fmtDuration(preview.duration || 0); };
+
+function wordCount(t) {
+    const n = (t || "").trim().match(/\b[\p{L}\p{N}’']+\b/gu);
+    return n ? n.length : 0;
+}
+

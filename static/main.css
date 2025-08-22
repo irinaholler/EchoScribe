@@ -251,27 +251,58 @@ audio {
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.25);
 }
 
-/* Fullscreen reader modal */
-.reader-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  background: rgba(0, 0, 0, 0.6);
+/* overlay that sits ONLY over the card */
+.card-expand {
   display: none;
+  position: absolute;
+  inset: -14px; /* extend slightly over the card for a framed look */
+  z-index: 30;
+  border-radius: 16px;
+  background: rgba(10, 10, 16, 0.95);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
 }
-.reader-modal[aria-hidden="false"] {
+
+/* when expanded, show the overlay */
+.transcript-card.is-expanded .card-expand {
   display: block;
 }
-.reader-shell {
-  position: absolute;
-  inset: 5vh 5vw;
-  background: rgba(10, 10, 16, 0.92);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65);
+
+/* expanded content */
+.expand-shell {
+  height: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
+  padding: 0.9rem;
 }
+.expand-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.result.expanded {
+  margin-top: 0.7rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  line-height: 1.55;
+  font-size: 1.05rem;
+  height: 100%;
+  max-height: none;
+  overflow: auto;
+}
+
+/* optional: dim underlying content a bit while expanded */
+.transcript-card.is-expanded > *:not(.card-expand) {
+  filter: blur(1px) brightness(0.8);
+  transition: filter 0.15s ease;
+}
+
+/* Reader modal */
 .reader-close {
   justify-self: end;
   margin: 0.6rem 0.6rem 0 0;

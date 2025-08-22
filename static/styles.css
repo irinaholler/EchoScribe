@@ -257,9 +257,8 @@
 /* Force dark neon look for audio element */
 audio {
   width: 100%;
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(135deg, var(--bg3), rgba(0, 255, 128, 0.15));
-  border: 0.5px solid var(--neon-green);
   box-shadow: 0 0 12px rgba(0, 255, 128, 0.25) inset;
   accent-color: var(--neon-green);
   filter: hue-rotate(85deg) saturate(1.4);
@@ -268,22 +267,22 @@ audio {
   position: relative;
   border-radius: 12px;
   padding: 6px;
+  border-radius: 8px;
   background: linear-gradient(135deg, var(--bg3), rgba(0, 255, 128, 0.15));
-  border: 1px solid var(--neon-green);
   box-shadow: 0 0 18px rgba(0, 255, 128, 0.35);
   overflow: hidden;
 }
 .audio-frame audio {
   width: 100%;
-  border-radius: 8px;
   background: transparent;
   accent-color: var(--neon-green);
+  border-radius: 8px;
 }
 .audio-frame .audio-overlay {
+  border-radius: 8px;
   position: absolute;
   inset: 0;
   pointer-events: none;
-  border-radius: inherit;
   box-shadow: inset 0 0 18px rgba(0, 255, 128, 0.35);
 }
 
@@ -344,6 +343,9 @@ audio {
   background: transparent;
   color: var(--ink);
   border: 1px solid var(--border);
+  pointer-events: auto;
+  position: relative;
+  z-index: 2;
   cursor: pointer;
 }
 .ghost:hover {
@@ -361,4 +363,93 @@ audio {
   background: rgba(0, 0, 0, 0.85);
   border: 1px solid var(--border);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+/* Make the card a containing block for the overlay */
+.transcript-card {
+  position: relative;
+  overflow: visible;
+}
+
+/* --- Language / Confidence strip --- */
+.langbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  align-items: center;
+  margin: 0.8rem 0 0.6rem;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.32rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+.pill-lang {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.18);
+}
+.pill-lang .flag {
+  font-size: 1.05rem;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 255, 0.25));
+}
+.pill-lang .code {
+  font-size: 0.78rem;
+  opacity: 0.85;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Confidence meter */
+.confidence {
+  min-width: 220px;
+  flex: 1 1 220px;
+}
+.conf-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-bottom: 0.25rem;
+}
+.conf-bar {
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.35);
+}
+.conf-bar span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+  box-shadow: 0 0 12px rgba(0, 255, 128, 0.35);
+  transition: width 0.35s ease;
+}
+
+.pill-meta {
+  border-color: var(--neon-purple);
+  color: var(--neon-purple);
+  background: rgba(128, 0, 255, 0.08);
 }

@@ -75,20 +75,39 @@
             </div>
 
             <div class="right">
-                <section class="card">
+                <section class="card transcript-card" id="transcriptCard">
                     <h2>Transcription</h2>
 
                     <div class="actions">
-                        <button id="transcribeBtn">Transcribe</button>
-                        <button id="expandBtn" class="ghost">Expand</button>
+                        <button id="transcribeBtn" type="button">TRANSCRIBE</button>
+                        <button id="expandBtn" class="ghost" type="button">EXPAND</button>
                     </div>
 
                     <div id="status" class="status"></div>
 
                     <!-- Language badges -->
                     <div id="langBar" class="langbar" hidden>
-                        <span id="langTag" class="pill pill-lang">EN</span>
-                        <span id="langProb" class="pill pill-prob">75%</span>
+                        <!-- Language pill -->
+                        <span class="pill pill-lang">
+                            <span id="langFlag" class="flag">🏳️</span>
+                            <span id="langName">Language</span>
+                            <span id="langCode" class="code">EN</span>
+                        </span>
+
+                        <!-- Confidence meter -->
+                        <div class="confidence">
+                            <div class="conf-head">
+                                <span>Confidence</span>
+                                <span id="confPct">96%</span>
+                            </div>
+                            <div class="conf-bar">
+                                <span id="confFill"></span>
+                            </div>
+                        </div>
+
+                        <!-- Meta pills -->
+                        <span class="pill pill-meta" id="metaDur">0:00</span>
+                        <span class="pill pill-meta" id="metaWords">0 words</span>
                     </div>
 
                     <pre id="result" class="result"></pre>
@@ -98,11 +117,14 @@
                         <button id="saveBtn" class="ghost">Save .txt</button>
                     </div>
 
-                    <!-- FULLSCREEN MODAL READER -->
-                    <div id="readerModal" class="reader-modal" aria-hidden="true">
-                        <div class="reader-shell">
-                            <button id="readerClose" class="reader-close" aria-label="Close">✕</button>
-                            <pre id="readerText" class="reader-text"></pre>
+                    <!-- Overlay that expands ONLY over this card -->
+                    <div class="card-expand" id="cardExpand" aria-hidden="true">
+                        <div class="expand-shell">
+                            <div class="expand-head">
+                                <strong>Transcription</strong>
+                                <button id="closeExpand" class="ghost" type="button">CLOSE</button>
+                            </div>
+                            <pre id="resultExpanded" class="result expanded"></pre>
                         </div>
                     </div>
                 </section>
