@@ -55,6 +55,7 @@
 
                         <div class="audio-frame">
                             <audio id="preview" controls></audio>
+                            <div class="audio-overlay"></div>
                         </div>
 
                         <p class="caption-chip">
@@ -66,26 +67,54 @@
 
                 <section class="card">
                     <h2>Or Upload a File</h2>
-                    <input id="fileInput" type="file" accept="audio/*" />
+                    <input id="fileInput" type="file" accept="audio/*" hidden />
+                    <p id="fileName" class="file-name muted"></p>
+                    <label for="fileInput" class="upload-btn">🎵 Choose Audio File</label>
                 </section>
+
             </div>
 
             <div class="right">
                 <section class="card">
                     <h2>Transcription</h2>
-                    <button id="transcribeBtn">Transcribe</button>
+
+                    <div class="actions">
+                        <button id="transcribeBtn">Transcribe</button>
+                        <button id="expandBtn" class="ghost">Expand</button>
+                    </div>
+
                     <div id="status" class="status"></div>
+
+                    <!-- Language badges -->
+                    <div id="langBar" class="langbar" hidden>
+                        <span id="langTag" class="pill pill-lang">EN</span>
+                        <span id="langProb" class="pill pill-prob">75%</span>
+                    </div>
+
                     <pre id="result" class="result"></pre>
+
+                    <div class="actions">
+                        <button id="copyBtn" class="ghost">Copy</button>
+                        <button id="saveBtn" class="ghost">Save .txt</button>
+                    </div>
+
+                    <!-- FULLSCREEN MODAL READER -->
+                    <div id="readerModal" class="reader-modal" aria-hidden="true">
+                        <div class="reader-shell">
+                            <button id="readerClose" class="reader-close" aria-label="Close">✕</button>
+                            <pre id="readerText" class="reader-text"></pre>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>
 
-        <!-- Inline back (kept minimal). Safe fallback to home -->
+        <!-- Inline back (safe fallback to home) -->
         <p><a href="/" class="card" style="display:inline-flex;padding:.6rem 1rem">← Back</a></p>
     </main>
 
-    <!-- Floating charm: scroll to top (nav.js binds smooth scroll) -->
-    <div class="footer-decoration" tabindex="0" aria-label="Scroll to top">
+    <!-- Floating charm: scroll to top -->
+    <div id="scrollTop" class="footer-decoration" role="button" tabindex="0" aria-label="Scroll to top">
         <span>↑</span><span>✨</span><span>💫</span><span>🏠</span>
     </div>
 
