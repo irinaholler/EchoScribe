@@ -59,6 +59,10 @@ def stt_page():
 def video_page():
     return app.send_static_file("video.html")
 
+@app.get("/live")
+def live_page():
+    return app.send_static_file("live.html")
+
 @app.get("/lyrics")
 def lyrics_page():
     # you can add a real page later

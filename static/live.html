@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>EchoScribe — Live Dictation</title>
+
+    <link rel="stylesheet" href="/static/main.css" />
+    <link rel="stylesheet" href="/static/hub.css" />
+    <link rel="stylesheet" href="/static/styles.css" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav id="top-nav">
+        <div class="nav-right" id="nav-menu">
+            <a href="/" class="nav-back" id="nav-back" title="Back (⌫)">← Back</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1 class="title-game" data-glitch="LIVE DICTATION">LIVE DICTATION</h1>
+        <h4 class="muted">Real‑time text while you speak (browser speech recognition).</h4>
+
+        <section class="card">
+            <div class="controls" style="gap:.5rem; flex-wrap:wrap">
+                <button id="startBtn">Start</button>
+                <button id="stopBtn" class="ghost" disabled>Stop</button>
+
+                <label class="ghost" style="display:inline-flex;align-items:center;gap:.5rem">
+                    Lang
+                    <select id="langSelect">
+                        <option value="en-US">English (US)</option>
+                        <option value="en-GB">English (UK)</option>
+                        <option value="de-DE">Deutsch</option>
+                        <option value="el-GR">Ελληνικά</option>
+                        <option value="fr-FR">Français</option>
+                        <option value="es-ES">Español</option>
+                        <option value="it-IT">Italiano</option>
+                        <option value="pt-PT">Português</option>
+                    </select>
+                </label>
+
+                <label class="ghost" style="display:inline-flex;align-items:center;gap:.5rem">
+                    Interim
+                    <input id="interimToggle" type="checkbox" checked />
+                </label>
+            </div>
+
+            <!-- live input level (visualizer) -->
+            <div class="viz-wrap">
+                <div class="viz-head">
+                    <span class="viz-dot" aria-hidden="true"></span>
+                    <span class="viz-title">Input level</span>
+                    <span class="viz-mini" id="liveBadge">IDLE</span>
+                </div>
+                <div id="viz" class="viz" aria-hidden="true"></div>
+            </div>
+        </section>
+
+        <section class="card transcript-card" id="transcriptCard">
+            <h2>Transcript</h2>
+
+            <div class="actions">
+                <button id="expandBtn" class="ghost" type="button">Expand</button>
+                <button id="copyBtn" class="ghost" type="button">Copy</button>
+                <button id="saveBtn" class="ghost" type="button">Save .txt</button>
+                <button id="clearBtn" class="ghost" type="button">Clear</button>
+            </div>
+
+            <div id="status" class="status"></div>
+
+            <!-- final text -->
+            <pre id="finalOut" class="result" style="min-height:160px"></pre>
+            <!-- interim (grey) -->
+            <pre id="interimOut" class="result" style="opacity:.6"></pre>
+
+            <!-- expand overlay just for this card -->
+            <div class="card-expand" id="cardExpand" aria-hidden="true">
+                <div class="expand-shell">
+                    <div class="expand-head">
+                        <strong>Transcript</strong>
+                        <button id="closeExpand" class="ghost" type="button">Close</button>
+                    </div>
+                    <pre id="resultExpanded" class="result expanded"></pre>
+                </div>
+            </div>
+        </section>
+
+        <p><a href="/" class="card" style="display:inline-flex;padding:.6rem 1rem">← Back</a></p>
+    </main>
+
+    <div id="scrollTop" class="footer-decoration" role="button" tabindex="0" aria-label="Scroll to top">
+        <span>↑</span><span>✨</span><span>💫</span><span>🏠</span>
+    </div>
+
+    <script src="/static/live.js"></script>
+    <script src="/static/nav.js"></script>
+</body>
+
+</html>

@@ -590,7 +590,11 @@ audio {
 }
 .video-frame video {
   width: 100%;
+  max-width: 950px;
+  max-height: 920px; /* keep it from being too tall */
+  margin: 0 auto;
   display: block;
+  object-fit: contain; /* avoid distortion */
   border-radius: 10px;
   background: transparent;
   accent-color: var(--neon-green);
@@ -717,4 +721,17 @@ audio {
 .transcript-card.is-expanded > *:not(.card-expand) {
   filter: blur(1px) brightness(0.85);
   transition: filter 0.15s ease;
+}
+
+/* live dictation interim text style */
+#interimOut {
+  color: var(--muted);
+  border-top: 1px dashed var(--border);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+/* viz LIVE badge look */
+.viz-mini {
+  color: var(--muted);
 }
