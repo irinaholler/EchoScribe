@@ -150,6 +150,22 @@ body {
   color: var(--ink);
   letter-spacing: 0.2px;
 }
+/* overlay that sits ONLY over the card */
+.card-expand {
+  display: none;
+  position: absolute;
+  inset: -14px; /* extend slightly over the card for a framed look */
+  z-index: 30;
+  border-radius: 16px;
+  background: rgba(10, 10, 16, 0.95);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+}
+
+/* when expanded, show the overlay */
+.transcript-card.is-expanded .card-expand {
+  display: block;
+}
 
 /* layout */
 #top-nav .nav-right {
@@ -210,4 +226,20 @@ body {
 }
 .foot a:hover {
   border-color: var(--neon-blue);
+}
+
+@media (max-width: 740px) {
+  .wrap {
+    padding: 1.6rem 0.9rem 2.2rem;
+  }
+  .hero .tag {
+    font-size: 0.95rem;
+  }
+  .card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  .card .cta {
+    padding: 0.5rem 0.8rem;
+  }
 }

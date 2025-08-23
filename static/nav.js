@@ -1,11 +1,3 @@
-if (backLink) {
-    backLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (window.history.length > 1) history.back();
-        else window.location.href = '/';
-    });
-}
-
 // Optional: toggle menu on mobile
 const toggle = document.getElementById('nav-toggle');
 const nav = document.querySelector('nav');
@@ -31,8 +23,6 @@ window.addEventListener('keydown', (e) => {
     const back = document.getElementById('nav-back');
     if (back) {
         back.addEventListener('click', function (e) {
-            // If there is real history, go back; otherwise go home.
-            // Prevent double navigation if we’re overriding.
             if (window.history.length > 1) {
                 e.preventDefault();
                 history.back();

@@ -11,10 +11,17 @@ karaoke highlights, or speaker diarization.
 - 🖥️ Web UI with Flask (HTML/CSS/JS frontend)
 - 🎤 Record voice or upload audio → transcribe with [faster-whisper](https://github.com/SYSTRAN/faster-whisper)
 - 🔊 Mic recording CLI (`record_transcribe.py`) with optional noise cleaning
+- 📹 Video → Text: Extract audio from video using ffmpeg, then transcribe.
 - 🎶 Lyrics mode (`lyrics_transcribe.py`): isolate vocals with [Demucs](https://github.com/facebookresearch/demucs) → Whisper
+- ⚡ Visualizer: Animated equalizer while recording.
 - 📜 Export transcripts as plain text or `.srt`
 
-⚡ Tech stack: `Flask`, `faster-whisper`, `sounddevice`, `scipy`, `demucs`, `FFmpeg`
+🛠️ Tech Stack
+
+Backend: Flask, faster-whisper
+Frontend: HTML, CSS, JavaScript
+Audio Processing: ffmpeg, fluent-ffmpeg, demucs (planned)
+AI Models: OpenAI Whisper
 
 🔹 Required for MVP (speech → text via web UI + Whisper)
 

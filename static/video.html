@@ -4,9 +4,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Video → Text (Preview)</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎧%3C/text%3E%3C/svg%3E">
+    <title>EchoScribe — Video → Text</title>
+
     <link rel="stylesheet" href="/static/main.css" />
     <link rel="stylesheet" href="/static/hub.css" />
+    <link rel="stylesheet" href="/static/styles.css" />
+
+    <!-- Gaming font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,23 +24,96 @@
         </div>
     </nav>
 
-    <main class="wrap">
-        <header class="hero">
-            <h1>Video → Text</h1>
-            <p class="tag">Preview page — functionality coming next</p>
-        </header>
-        <p style="color:var(--muted)">We’ll accept a video file, extract audio with FFmpeg, then transcribe with
-            Whisper.</p>
+    <main class="container">
+        <h1 class="title-game" data-glitch="VIDEO → TEXT">VIDEO → TEXT</h1>
+        <h4 class="muted">Upload a video, we’ll extract audio and transcribe.</h4>
+
+        <section class="card">
+            <h2>Upload a Video</h2>
+
+            <input id="videoInput" type="file" accept="video/*" hidden />
+            <label for="videoInput" class="upload-btn">🎬 Choose Video File</label>
+
+            <div class="meta-grid">
+                <div class="meta-item"><span class="k">File</span> <span id="videoName" class="v">—</span></div>
+                <div class="meta-item"><span class="k">Size</span> <span id="videoSize" class="v">—</span></div>
+                <div class="meta-item"><span class="k">Duration</span> <span id="videoDur" class="v">0:00</span></div>
+            </div>
+
+            <div class="video-frame">
+                <video id="vpreview" controls playsinline></video>
+                <div class="video-overlay"></div>
+            </div>
+
+            <div class="progress" id="progressRow" hidden>
+                <div class="progress-head">
+                    <span>Uploading & Transcribing</span>
+                    <span id="progressPct">0%</span>
+                </div>
+                <div class="progress-bar"><span id="progressFill"></span></div>
+            </div>
+        </section>
+
+        <section class="card transcript-card" id="transcriptCard">
+            <h2>Transcription</h2>
+
+            <div class="actions">
+                <button id="vTranscribeBtn" type="button">Transcribe</button>
+                <button id="expandBtn" class="ghost" type="button">Expand</button>
+            </div>
+
+            <div id="status" class="status"></div>
+
+            <!-- Language / confidence strip -->
+            <div id="langBar" class="langbar" hidden>
+                <span class="pill pill-lang">
+                    <span id="langFlag" class="flag">🏳️</span>
+                    <span id="langName">Language</span>
+                    <span id="langCode" class="code">EN</span>
+                </span>
+
+                <div class="confidence">
+                    <div class="conf-head">
+                        <span>Confidence</span>
+                        <span id="confPct">—</span>
+                    </div>
+                    <div class="conf-bar">
+                        <span id="confFill"></span>
+                    </div>
+                </div>
+
+                <span class="pill pill-meta" id="metaDur">0:00</span>
+                <span class="pill pill-meta" id="metaWords">0 words</span>
+            </div>
+
+            <pre id="result" class="result"></pre>
+
+            <div class="actions">
+                <button id="copyBtn" class="ghost" type="button">Copy</button>
+                <button id="saveBtn" class="ghost" type="button">Save .txt</button>
+            </div>
+
+            <!-- Expand overlay only over this card -->
+            <div class="card-expand" id="cardExpand" aria-hidden="true">
+                <div class="expand-shell">
+                    <div class="expand-head">
+                        <strong>Transcription</strong>
+                        <button id="closeExpand" class="ghost" type="button">Close</button>
+                    </div>
+                    <pre id="resultExpanded" class="result expanded"></pre>
+                </div>
+            </div>
+        </section>
+
         <p><a href="/" class="card" style="display:inline-flex;padding:.6rem 1rem">← Back</a></p>
     </main>
 
-    <div class="footer-decoration" tabindex="0" aria-label="Back to previous screen"
-        onclick="(history.length>1?history.back():location.assign('/'))">
-        <span>←</span><span>✨</span><span>💫</span><span>🏠</span>
+    <div id="scrollTop" class="footer-decoration" role="button" tabindex="0" aria-label="Scroll to top">
+        <span>↑</span><span>✨</span><span>💫</span><span>🏠</span>
     </div>
 
     <!-- Scripts -->
-    <script src="/static/app.js"></script>
+    <script src="/static/video.js"></script>
     <script src="/static/nav.js"></script>
 </body>
 
