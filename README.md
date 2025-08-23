@@ -87,7 +87,7 @@ Demucs is optional and heavy (PyTorch dependency). Only install if you want Lyri
 
 📜 License
 
-MIT License — free to use, modify, and learn from.
+Permission is granted to view and use this code for personal learning purposes only.
 
 🔹 Needed for lyrics mode (vocals → Whisper)
 
